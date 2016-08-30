@@ -1,0 +1,10 @@
+---
+layout: default
+title: "OpenIVI Mobility"
+---
+
+== Introduction
+
+OpenIVI Mobility is a project to make it easy to start developing mobility software. Developed at link:advancedtelematic.com[Advanced Telematic Systems] in Berlin, it's an open source automotive mobility platform, including hardware specs, 3D-printable case, and a development environment to help you get your demo app running in a vehicle as quickly as possible.
+
+To get started, you may want to link:https://github.com/openivimobility/meta-oim[build a Yocto image], link:hardware/build-your-own-head-unit.html[build a head unit for your test bench or test vehicle], or just link:https://github.com/openivimobility/openivi-html5[start developing on your local workstation], and worry about putting your app on the head unit later.
