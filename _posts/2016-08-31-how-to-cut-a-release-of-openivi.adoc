@@ -1,0 +1,48 @@
+---
+layout: page
+title: "How to cut a release of OpenIVI"
+category: developing
+date: 2016-08-31 15:27:47
+---
+
+The following steps will guide you through the process.
+
+There's a stable branch in each of the following projects
+  - rvi_sota_server
+  - meta_oim
+  - ota-plus-demo-provision
+
+So the version that you want to release (latest master? older master plus a few cherrypicks), get the stable branch to be that. Then `git push` that branch to remote.
+
+Now, from the `/pro` directory you can run:
+
+```
+cd .repo/manifests/
+repo sync -m stable.xml
+```
+
+With the repositories are lined up, build a release with `bitbake`. From the `/pro` dir run:
+
+```
+cd poky
+. oe-init-build-env
+bitbake -k openivi-image
+```
+
+Now you should have your images in `build/tmp/deploy/images/genericx86-64/` with `genericx86-64` part possibly changing based on the architecture.
+
+The image you are interested is probably one of:
+- build/tmp/deploy/images/genericx86-64/openivi-image-genericx86-64.iso
+- build/tmp/deploy/images/genericx86-64/openivi-image-genericx86-64.hddimg
+
+If you want to share these, you can put them on s3 with the script `/meta-oim/scripts/release.sh`. There's instructions for its use at the top of the script, but the short version is:
+
+```
+export AWS_ACCESS_KEY_ID=abc123
+export AWS_SECRET_ACCESS_KEY=def456
+./poky/meta-oim/scripts/release.sh poky/build/tmp/deploy/images/genericx86-64/openivi-image-genericx86-64.iso
+```
+
+You'll then need to log onto s3 and make the files public, or give them whatever permissions are needed.
+
+To burn these images to a disk, see the instructions for link:../developing/writing-images-to-microsd.html[writing images to a microSD card].
