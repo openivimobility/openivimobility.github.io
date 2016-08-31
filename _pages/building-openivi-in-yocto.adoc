@@ -1,0 +1,1 @@
+../_posts/2016-08-31-building-openivi-in-yocto.adoc

@@ -1,0 +1,78 @@
+---
+layout: page
+title: "Building with Yocto"
+category: developing
+date: 2016-08-31 14:45:19
+---
+
+OpenIVI uses the 'repo' tool to checkout and manage multiple git repositories.
+
+First install repo by following https://source.android.com/source/downloading.html[these instructions]
+
+After that, ensure you have the http://www.yoctoproject.org/docs/latest/mega-manual/mega-manual.html#required-packages-for-the-host-development-system[packages required by Yocto] installed.
+
+Then fetch the source with:
+
+[source,shell]
+mkdir pro
+cd pro
+repo init -u git@github.com:advancedtelematic/pro.git
+repo sync # Fetch all the git repositories
+cd poky
+export TEMPLATECONF=meta-oim/conf
+source oe-init-build-env
+
+At this point you may want to edit conf/local.conf to set DL_DIR and SSTATE_DIR. These can (and should) be shared between multiple builds. If you are using 'shovel' for the build, then use:
+
+[source,ini]
+DL_DIR ?= "/yocto-downloads"
+SSTATE_DIR ?= "/yocto-sstate-cache"
+
+Then type
+
+[source,shell]
+bitbake -k openivi-image
+
+...and grab a coffee. This will take an hour or so the first time.
+
+== Using repo manifests
+
+Repo manifest files list a set of git repositories and the branches or revisions to check out from them. These can be used to fetch the latest 'stable' branch of all the code, and to revert to the exact source trees used for a build.
+
+=== Stable Builds
+
+There's a file stable.xml in the root of the project. It's the same as default.xml but pointed at the stable revision of some of the projects. To check out these versions using repo run the following:
+
+[source,shell]
+repo sync -m stable.xml # Checkout stable just once
+
+or
+
+[source,shell]
+repo init -m stable.xml  # Make stable the default for sync
+repo sync
+
+=== Rebuilding old releases
+
+The manifest files can also be used to recreate old builds of OpenIVI. The build process automatically includes the current manifest in `/etc/manifest.xml` on the built image. To recreate an old build from an existing image or piece of hardware, fetch this file and pass it to `repo sync -m` or `repo init -m`. You can also check out an older commit from the pro repo to get older `manifest.xml` files.
+
+== Using the 'repo' tool
+
+See http://xda-university.com/as-a-developer/repo-tips-tricks
+
+== Rust build errors
+
+Sometimes the Rust client code fails to compile.  If sota-client fails to build, run the following commands:
+
+	bitbake -c clean sota-client
+	bitbake -c devshell sota-client
+
+Then in the xterm that pops up, run:
+
+	cargo clean
+
+Finally build sota-client with:
+
+	bitbake sota-client
+
+After that, `bitbake openivi-image` should work again. See https://advancedtelematic.atlassian.net/browse/PRO-1005[PRO-1005] for a proper fix for this.
