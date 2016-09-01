@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>OpenIVI Mobility : Building with Yocto</title>
+        <meta name="description" content="Get your code moving">
+
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+    </head>
+    <body>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <h4><a class="brand" href="/">OpenIVI Mobility</a>
+    <small>Get your code moving</small>
+</h4>
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                
+                    <div id="navigation" class="col-sm-3">
+                        <ul class="nav nav-list">
+    <li><a href="/">Home</a></li>
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Developing</li>
+            
+            <li data-order=""><a href="/developing/building-openivi-in-yocto.html">Building with Yocto</a></li>
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">About</li>
+            
+            <li data-order=""><a href="/about/introduction.html">Introduction</a></li>
+        
+    
+        
+        
+
+        
+            
+                <li class="nav-header">Hardware</li>
+            
+            <li data-order=""><a href="/hardware/build-your-own-head-unit.html">Build your own head unit</a></li>
+        
+    
+        
+        
+
+        
+    
+        
+        
+
+        
+    
+        
+        
+
+        
+    
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id="content" class="col-sm-9">
+                        <div id="content" class="col-sm-10">
+                            <div class="page-header">
+    <h2>Building with Yocto
+        
+    </h2>
+</div>
+
+<div class="paragraph">
+<p>OpenIVI uses the 'repo' tool to checkout and manage multiple git repositories.</p>
+</div>
+<div class="paragraph">
+<p>First install repo by following <a href="https://source.android.com/source/downloading.html">these instructions</a></p>
+</div>
+<div class="paragraph">
+<p>After that, ensure you have the <a href="http://www.yoctoproject.org/docs/latest/mega-manual/mega-manual.html#required-packages-for-the-host-development-system">packages required by Yocto</a> installed.</p>
+</div>
+<div class="paragraph">
+<p>Then fetch the source with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell">mkdir pro
+cd pro
+repo init -u git@github.com:advancedtelematic/pro.git
+repo sync # Fetch all the git repositories
+cd poky
+export TEMPLATECONF=meta-oim/conf
+source oe-init-build-env</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>At this point you may want to edit conf/local.conf to set DL_DIR and SSTATE_DIR. These can (and should) be shared between multiple builds. If you are using 'shovel' for the build, then use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="ini"><span style="color: #7D9029">DL_DIR ?</span><span style="color: #666666">=</span> <span style="color: #BA2121">&quot;/yocto-downloads&quot;</span>
+<span style="color: #7D9029">SSTATE_DIR ?</span><span style="color: #666666">=</span> <span style="color: #BA2121">&quot;/yocto-sstate-cache&quot;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then type</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell">bitbake -k openivi-image</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8230;&#8203;and grab a coffee. This will take an hour or so the first time.</p>
+</div>
+<div class="sect1">
+<h2 id="using-repo-manifests">Using repo manifests</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Repo manifest files list a set of git repositories and the branches or revisions to check out from them. These can be used to fetch the latest 'stable' branch of all the code, and to revert to the exact source trees used for a build.</p>
+</div>
+<div class="sect2">
+<h3 id="stable-builds">Stable Builds</h3>
+<div class="paragraph">
+<p>There&#8217;s a file stable.xml in the root of the project. It&#8217;s the same as default.xml but pointed at the stable revision of some of the projects. To check out these versions using repo run the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell">repo sync -m stable.xml # Checkout stable just once</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell">repo init -m stable.xml  # Make stable the default for sync
+repo sync</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="rebuilding-old-releases">Rebuilding old releases</h3>
+<div class="paragraph">
+<p>The manifest files can also be used to recreate old builds of OpenIVI. The build process automatically includes the current manifest in <code>/etc/manifest.xml</code> on the built image. To recreate an old build from an existing image or piece of hardware, fetch this file and pass it to <code>repo sync -m</code> or <code>repo init -m</code>. You can also check out an older commit from the pro repo to get older <code>manifest.xml</code> files.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-the-repo-tool">Using the 'repo' tool</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>See <a href="http://xda-university.com/as-a-developer/repo-tips-tricks" class="bare">http://xda-university.com/as-a-developer/repo-tips-tricks</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rust-build-errors">Rust build errors</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sometimes the Rust client code fails to compile.  If sota-client fails to build, run the following commands:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>bitbake -c clean sota-client
+bitbake -c devshell sota-client</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then in the xterm that pops up, run:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>cargo clean</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally build sota-client with:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>bitbake sota-client</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After that, <code>bitbake openivi-image</code> should work again. See <a href="https://advancedtelematic.atlassian.net/browse/PRO-1005">PRO-1005</a> for a proper fix for this.</p>
+</div>
+</div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+
+            <div class="row">
+                <div id="footer" class="col-sm-12">
+                    Documentation for <a href="https://github.com/openivimobility">OpenIVI Mobility</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+        
+    </body>
+</html>
