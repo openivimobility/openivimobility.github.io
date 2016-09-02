@@ -1,0 +1,36 @@
+---
+layout: page
+title: "Writing images to microSD"
+category: developing
+date: 2016-01-01 00:00:00
+---
+The OpenIVI ISO image needs to be written to the microSD card in the device
+using the UNetbootin tool, which runs on Windows, Mac and Linux
+
+_Don't use the Linux 'dd' command on Linux. It gives subtly different results to unetbootin. Use meta-oim/scripts/mkefidisk.sh for development._
+
+Here are the installation steps:
+
+1. Download and install https://unetbootin.github.io/[UNetbootin]
+
+2. Download the OpenIVI image.
+
+3. Unzip the image. (You should be able to simply double-click it to unzip.)
+
+4. Remove the microSD card from the OpenIVI unit.  Unscrew the cover of the unit with the screws on the back. The microSD card slot is in the top left of the MinnowBoard Turbot, next to the USB connectors. This is easier with small hands.
+
+5. Plug the microSD card into a laptop (either Windows or Mac) using a SD card reader
+
+6. Open UNetbootin, and select the "Diskimage - ISO" option.
+
+7. Select the OpenIVI image you downloaded.
+
+8. Select the microSD card you just inserted, and click OK. Copying the image may take a few minutes.
+
+9. Close UNetbootin and eject the microSD card from your computer.
+
+10. You can now insert this microSD card back into the OpenIVI head unit.
+
+11. Connect OpenIVI to the network using wired ethernet, and power it on.
+
+12. The device should boot into the OpenIVI graphical interface.  If this is an ATS image, it will appear in the sales demo account of https://app.atsgarage.com[ATS Garage]
