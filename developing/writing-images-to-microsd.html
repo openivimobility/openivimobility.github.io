@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width">
 
-        <title>OpenIVI Mobility : Build your own head unit</title>
+        <title>OpenIVI Mobility : Writing images to microSD</title>
         <meta name="description" content="Get your code moving">
 
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -89,83 +89,60 @@
                     <div id="content" class="col-sm-9">
                         <div id="content" class="col-sm-10">
                             <div class="page-header">
-    <h2>Build your own head unit
+    <h2>Writing images to microSD
         
     </h2>
 </div>
 
-<div class="sect2">
-<h3 id="open-hardware-easy-to-build">Open Hardware, Easy to Build</h3>
 <div class="paragraph">
-<p>One of the most important goals of OpenIVI is to let you get an actual piece of hardware into a vehicle. To get you there, we provide a parts list that should help you build a test unit very quickly. We&#8217;ve tried to select parts that are reasonably priced, provide solid enough performance for a variety of applications, and are easily available for purchase.</p>
+<p>The OpenIVI ISO image needs to be written to the microSD card in the device
+using the UNetbootin tool, which runs on Windows, Mac and Linux</p>
 </div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Component</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Approximate Cost/€</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gigabyte J1900N-D3V</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">88.00</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">8GB RAM</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">58.00</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SSD</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">51.00</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">M3-ATX PicoPSU</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">55.00</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Molex → P4 cable</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">4.00</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.chalk-elec.com/?page_id=1280#!/7-open-frame-universal-HDMI-LCD-with-capacitive-multi-touch/p/21750207/category=3094861">Touchscreen</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">125.00</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.amazon.de/COM-FOUR%C2%AE-Stecker-Adapter-vergoldet-gewinkelt/dp/B00LOGIUVU/ref=sr_1_1?s=computers&amp;ie=UTF8&amp;qid=1443017549&amp;sr=1-1&amp;keywords=COM-FOUR%C2%AE+HDMI+Buchse+auf+Mini+HDMI+Stecker+Adapter+vergoldet+schwarz+%28links+gewinkelt%29">Left-hand Right angle mini hdmi</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">7.00</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">HDMI cable</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">5.00</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Right angle DVI</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">6.00</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">M3 Hex bolts</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.10</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">M3 Nylock nuts</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.10</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">M3 Washers</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.10</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">12v PSU</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">10.00</p></td>
-</tr>
-</tbody>
-</table>
 <div class="paragraph">
-<p>You can also 3D print a case that will fit in a standard head unit slot. The project files for that are available over at the <a href="https://github.com/openivimobility/openivi-hardware">openivi-hardware repo</a>.</p>
+<p><em>Don&#8217;t use the Linux 'dd' command on Linux. It gives subtly different results to unetbootin. Use meta-oim/scripts/mkefidisk.sh for development.</em></p>
 </div>
+<div class="paragraph">
+<p>Here are the installation steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Download and install <a href="https://unetbootin.github.io/">UNetbootin</a></p>
+</li>
+<li>
+<p>Download the OpenIVI image.</p>
+</li>
+<li>
+<p>Unzip the image. (You should be able to simply double-click it to unzip.)</p>
+</li>
+<li>
+<p>Remove the microSD card from the OpenIVI unit.  Unscrew the cover of the unit with the screws on the back. The microSD card slot is in the top left of the MinnowBoard Turbot, next to the USB connectors. This is easier with small hands.</p>
+</li>
+<li>
+<p>Plug the microSD card into a laptop (either Windows or Mac) using a SD card reader</p>
+</li>
+<li>
+<p>Open UNetbootin, and select the "Diskimage - ISO" option.</p>
+</li>
+<li>
+<p>Select the OpenIVI image you downloaded.</p>
+</li>
+<li>
+<p>Select the microSD card you just inserted, and click OK. Copying the image may take a few minutes.</p>
+</li>
+<li>
+<p>Close UNetbootin and eject the microSD card from your computer.</p>
+</li>
+<li>
+<p>You can now insert this microSD card back into the OpenIVI head unit.</p>
+</li>
+<li>
+<p>Connect OpenIVI to the network using wired ethernet, and power it on.</p>
+</li>
+<li>
+<p>The device should boot into the OpenIVI graphical interface.  If this is an ATS image, it will appear in the sales demo account of <a href="https://app.atsgarage.com">ATS Garage</a></p>
+</li>
+</ol>
 </div>
 
                         </div>

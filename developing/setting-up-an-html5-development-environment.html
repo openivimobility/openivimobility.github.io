@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width">
 
-        <title>OpenIVI Mobility : Building with Yocto</title>
+        <title>OpenIVI Mobility : Setting up an HTML5 development environment</title>
         <meta name="description" content="Get your code moving">
 
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -89,126 +89,196 @@
                     <div id="content" class="col-sm-9">
                         <div id="content" class="col-sm-10">
                             <div class="page-header">
-    <h2>Building with Yocto
+    <h2>Setting up an HTML5 development environment
         
     </h2>
 </div>
 
 <div class="paragraph">
-<p>OpenIVI uses the 'repo' tool to checkout and manage multiple git repositories.</p>
+<p>OpenIVI Mobility includes an HTML5 runtime for OpenIVI Mobility applications, available at <a href="https://github.com/openivimobility/openivi-html5">its GitHub repo</a>.
+It supports two modes of operation:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Running on a PC for test/development</p>
+</li>
+<li>
+<p>Running on an actual OpenIVI device for real-world usage</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>First install repo by following <a href="https://source.android.com/source/downloading.html">these instructions</a></p>
-</div>
-<div class="paragraph">
-<p>After that, ensure you have the <a href="http://www.yoctoproject.org/docs/latest/mega-manual/mega-manual.html#required-packages-for-the-host-development-system">packages required by Yocto</a> installed.</p>
-</div>
-<div class="paragraph">
-<p>Then fetch the source with:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="shell">mkdir pro
-cd pro
-repo init -u git@github.com:advancedtelematic/pro.git
-repo sync # Fetch all the git repositories
-cd poky
-export TEMPLATECONF=meta-oim/conf
-source oe-init-build-env</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>At this point you may want to edit conf/local.conf to set DL_DIR and SSTATE_DIR. These can (and should) be shared between multiple builds. If you are using 'shovel' for the build, then use:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="ini"><span style="color: #7D9029">DL_DIR ?</span><span style="color: #666666">=</span> <span style="color: #BA2121">&quot;/yocto-downloads&quot;</span>
-<span style="color: #7D9029">SSTATE_DIR ?</span><span style="color: #666666">=</span> <span style="color: #BA2121">&quot;/yocto-sstate-cache&quot;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then type</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="shell">bitbake -k openivi-image</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>&#8230;&#8203;and grab a coffee. This will take an hour or so the first time.</p>
+<p>Additionally, when it&#8217;s running on a device, you can do remote debugging through Google Chrome.</p>
 </div>
 <div class="sect1">
-<h2 id="using-repo-manifests">Using repo manifests</h2>
+<h2 id="building">Building</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Repo manifest files list a set of git repositories and the branches or revisions to check out from them. These can be used to fetch the latest 'stable' branch of all the code, and to revert to the exact source trees used for a build.</p>
-</div>
 <div class="sect2">
-<h3 id="stable-builds">Stable Builds</h3>
+<h3 id="linux">Linux</h3>
 <div class="paragraph">
-<p>There&#8217;s a file stable.xml in the root of the project. It&#8217;s the same as default.xml but pointed at the stable revision of some of the projects. To check out these versions using repo run the following:</p>
+<p>Install dependencies</p>
 </div>
-<div class="listingblock">
+<div class="literalblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="shell">repo sync -m stable.xml # Checkout stable just once</code></pre>
+<pre>sudo apt-get update
+sudo apt-get install build-essential cmake libgles2-mesa-dev libegl1-mesa-dev libwayland-dev qtbase5-dev
+sudo apt-get install libqt5dbus5 libqt5webkit5-dev exuberant-ctags</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>or</p>
+<p>Create a build directory and configure the build with cmake</p>
 </div>
-<div class="listingblock">
+<div class="literalblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="shell">repo init -m stable.xml  # Make stable the default for sync
-repo sync</code></pre>
+<pre>mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Debug ..</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Build</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>make</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>./openivi-html5</pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="rebuilding-old-releases">Rebuilding old releases</h3>
+<h3 id="macos">MacOS</h3>
 <div class="paragraph">
-<p>The manifest files can also be used to recreate old builds of OpenIVI. The build process automatically includes the current manifest in <code>/etc/manifest.xml</code> on the built image. To recreate an old build from an existing image or piece of hardware, fetch this file and pass it to <code>repo sync -m</code> or <code>repo init -m</code>. You can also check out an older commit from the pro repo to get older <code>manifest.xml</code> files.</p>
+<p>Install dependencies:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>install Qt Creator from <a href="http://www.qt.io/download-open-source/" class="bare">http://www.qt.io/download-open-source/</a>. Note that the default install includes support files for iOS; these are not required for OpenIVI Mobility, and take 7GB of disk space, so you may wish to deselect them during install.</p>
+</li>
+<li>
+<p>install the homebrew version of ctags; the stock xcode one will not work: <code>brew install ctags</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Create a build directory and configure the build with cmake. Note that on OSX, you will need to tell cmake where to find Qt; the default install location is ~/Qt/&lt;version&gt;/clang_64/</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=~/Qt/5.5/clang_64/ ..</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Build</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>make</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>./openivi-html5</pre>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="using-the-repo-tool">Using the 'repo' tool</h2>
+<h2 id="genivi-software-loading-manager-integration">GENIVI Software Loading Manager Integration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>See <a href="http://xda-university.com/as-a-developer/repo-tips-tricks" class="bare">http://xda-university.com/as-a-developer/repo-tips-tricks</a></p>
+<p>Openivi-html5 integrates with a slightly modified version of the GENIVI Software Loading Manager.</p>
+</div>
+<div class="paragraph">
+<p>First, follow the openivi-html5 README instructions to build and run it. After the "Run" step you should see the Getting Started screen.</p>
+</div>
+<div class="paragraph">
+<p>The integration depends on some extra features that are only on our branch of the SLM.
+In a new terminal clone the GENIVI Software Management repo:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>git clone -b feat/hmi-api git@github.com:cajun-rat/genivi_software_management.git
+cd genivi_software_management/</pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="osx-additional-directions">OSX additional directions</h3>
+<div class="paragraph">
+<p>The software manager and sota client require gtk and dbus, neither of which are available by default on OSX. You can install them using homebrew, though it does require a couple of extra commands.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>brew install pygtk
+brew install homebrew/python/python-dbus
+ln -sfv /usr/local/opt/d-bus/*.plist ~/Library/LaunchAgents
+launchctl load ~/Library/LaunchAgents/org.freedesktop.dbus-session.plist</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These four commands should be sufficient for a fresh install, but note that if you&#8217;ve previously had dbus installed, you may need to delete, recreate, and reload the launch agent plist file.</p>
+</div>
+<div class="paragraph">
+<p>Now start the software loading manager (note that this opens 5 terminals) by running:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>sh start_swm.sh</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or, on OSX:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>sh start_swm_osx.sh</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Back in the openivi-html5 window, click on the menu item "File &#8594; Open File" and open openivi-html5/example/demo.html</p>
+</div>
+<div class="paragraph">
+<p>You should see "There are 0 updates available"</p>
+</div>
+<div class="paragraph">
+<p>Now in another new terminal, navigate to genivi_software_management and run:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>python sota_client.py</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see the update appear in the openivi-html5 gui along with the text "Awaiting Approval. There are 1 updates available". To start the update hit the "Approve Updates" button.</p>
+</div>
+<div class="paragraph">
+<p>The openivi-html5 gui should show the update installing, then return to the "There are 0 updates available" state.</p>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="rust-build-errors">Rust build errors</h2>
+<h2 id="remote-debugging">Remote Debugging</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Sometimes the Rust client code fails to compile.  If sota-client fails to build, run the following commands:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>bitbake -c clean sota-client
-bitbake -c devshell sota-client</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then in the xterm that pops up, run:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cargo clean</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Finally build sota-client with:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>bitbake sota-client</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>After that, <code>bitbake openivi-image</code> should work again. See <a href="https://advancedtelematic.atlassian.net/browse/PRO-1005">PRO-1005</a> for a proper fix for this.</p>
+<p>WebKit HTML5 remote debugging is enabled by default on port 9221. With
+openivi-html5 running, just point Google Chrome (or Chromium) at
+<a href="http://localhost:9221" class="bare">http://localhost:9221</a>  This works with remote computers too: just find the
+IP address of the embedded machine with ifconfig.</p>
 </div>
 </div>
 </div>
