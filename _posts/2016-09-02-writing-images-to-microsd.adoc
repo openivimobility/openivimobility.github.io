@@ -4,10 +4,33 @@ title: "Writing images to microSD"
 category: developing
 date: 2016-01-01 00:00:00
 ---
-The OpenIVI ISO image needs to be written to the microSD card in the device
-using the UNetbootin tool, which runs on Windows, Mac and Linux
 
-_Don't use the Linux 'dd' command on Linux. It gives subtly different results to unetbootin. Use meta-oim/scripts/mkefidisk.sh for development._
+There are several ways to write the rootfs and kernel image created by Yocto to a bootable disk. The type of image and how it is written to disk affects the boot process in subtle ways, therefore it is recommended to use a single method: mkefidisk.sh in meta-oim/scripts.
+
+If you don't have a linux machine available to write the disk, then UNetbootin (for Windows or MacOS) can be used; see the description at the end of this document. Note that mkefidisk.sh is unlikely to work inside a VM.
+
+## mkefidisk (Recommended)
+
+The following incantation is suitable for writing to a microSD card on Linux:
+
+  sudo ../meta-oim/scripts/mkefidisk.sh /dev/sdX tmp/deploy/images/genericx86-64/openivi-image-genericx86-64.iso /dev/mmcblk0
+
+If the SOTA_TOML environment variable is set, then mkefidisk will copy that file into /etc/sota.toml, provisioning the machine at image creation time. Since sudo squashes environment variables by default, the value of SOTA_TOML needs to be passed in explicitly:
+
+  sudo SOTA_TOML=/tmp/mysota.toml ../meta-oim/scripts/mkefidisk.sh /dev/sdX tmp/deploy/images/genericx86-64/openivi-image-genericx86-64.iso /dev/mmcblk0
+
+## Provisioning options
+
+There are 3 ways to provision sota_client:
+
+1. Ethernet MAC address based - traditional
+2. sota.toml stored in efivars - First get the sota.toml onto the device, then run  `ota-plus-demo-provision sota.toml` to save it in EFI. ota-plus-demo-provision will read from there even after the SD card has been reflashed.
+3. mkefidisk.sh - As above, passed via the `SOTA_TOML` environment variable.
+
+
+## UNetbootin (Backup)
+
+As a backup, UNetbootin can be used to write the image.
 
 Here are the installation steps:
 
