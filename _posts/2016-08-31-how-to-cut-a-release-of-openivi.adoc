@@ -7,12 +7,13 @@ date: 2016-08-31 15:27:47
 
 The following steps will guide you through the process.
 
-There's a stable branch in each of the following projects
+There's a stable branch in each of the following projects:
+
   - rvi_sota_server
   - meta_oim
   - ota-plus-demo-provision
 
-So the version that you want to release (latest master? older master plus a few cherrypicks), get the stable branch to be that. Then `git push` that branch to remote.
+So for the version that you want to release (latest master? older master plus a few cherrypicks?), get the stable branch to be that. Then `git push` that branch to remote.
 
 Now, from the `/pro` directory you can run:
 
@@ -21,7 +22,7 @@ cd .repo/manifests/
 repo sync -m stable.xml
 ```
 
-With the repositories are lined up, build a release with `bitbake`. From the `/pro` dir run:
+When the repositories are lined up, build a release with `bitbake`. From the `/pro` dir run:
 
 ```
 cd poky
@@ -29,7 +30,7 @@ cd poky
 bitbake -k openivi-image
 ```
 
-Now you should have your images in `build/tmp/deploy/images/genericx86-64/` with `genericx86-64` part possibly changing based on the architecture.
+Now you should have your images in `build/tmp/deploy/images/genericx86-64/`, with the `genericx86-64` part possibly changing based on the architecture.
 
 The image you are interested in is: `build/tmp/deploy/images/genericx86-64/openivi-image-genericx86-64.iso`
 
