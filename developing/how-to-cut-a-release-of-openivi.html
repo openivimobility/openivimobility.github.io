@@ -98,13 +98,23 @@
 <p>The following steps will guide you through the process.</p>
 </div>
 <div class="paragraph">
-<p>There&#8217;s a stable branch in each of the following projects
-  - rvi_sota_server
-  - meta_oim
-  - ota-plus-demo-provision</p>
+<p>There&#8217;s a stable branch in each of the following projects:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>rvi_sota_server</p>
+</li>
+<li>
+<p>meta_oim</p>
+</li>
+<li>
+<p>ota-plus-demo-provision</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>So the version that you want to release (latest master? older master plus a few cherrypicks), get the stable branch to be that. Then <code>git push</code> that branch to remote.</p>
+<p>So for the version that you want to release (latest master? older master plus a few cherrypicks?), get the stable branch to be that. Then <code>git push</code> that branch to remote.</p>
 </div>
 <div class="paragraph">
 <p>Now, from the <code>/pro</code> directory you can run:</p>
@@ -116,7 +126,7 @@ repo sync -m stable.xml</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>With the repositories are lined up, build a release with <code>bitbake</code>. From the <code>/pro</code> dir run:</p>
+<p>When the repositories are lined up, build a release with <code>bitbake</code>. From the <code>/pro</code> dir run:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -126,7 +136,7 @@ bitbake -k openivi-image</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now you should have your images in <code>build/tmp/deploy/images/genericx86-64/</code> with <code>genericx86-64</code> part possibly changing based on the architecture.</p>
+<p>Now you should have your images in <code>build/tmp/deploy/images/genericx86-64/</code>, with the <code>genericx86-64</code> part possibly changing based on the architecture.</p>
 </div>
 <div class="paragraph">
 <p>The image you are interested in is: <code>build/tmp/deploy/images/genericx86-64/openivi-image-genericx86-64.iso</code></p>
