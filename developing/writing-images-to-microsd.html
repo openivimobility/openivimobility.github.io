@@ -95,11 +95,58 @@
 </div>
 
 <div class="paragraph">
-<p>The OpenIVI ISO image needs to be written to the microSD card in the device
-using the UNetbootin tool, which runs on Windows, Mac and Linux</p>
+<p>There are several ways to write the rootfs and kernel image created by Yocto to a bootable disk. The type of image and how it is written to disk affects the boot process in subtle ways, therefore it is recommended to use a single method: mkefidisk.sh in meta-oim/scripts.</p>
 </div>
 <div class="paragraph">
-<p><em>Don&#8217;t use the Linux 'dd' command on Linux. It gives subtly different results to unetbootin. Use meta-oim/scripts/mkefidisk.sh for development.</em></p>
+<p>If you don&#8217;t have a linux machine available to write the disk, then UNetbootin (for Windows or MacOS) can be used; see the description at the end of this document. Note that mkefidisk.sh is unlikely to work inside a VM.</p>
+</div>
+<div class="sect1">
+<h2 id="mkefidisk-recommended">mkefidisk (Recommended)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following incantation is suitable for writing to a microSD card on Linux:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>sudo ../meta-oim/scripts/mkefidisk.sh /dev/sdX tmp/deploy/images/genericx86-64/openivi-image-genericx86-64.iso /dev/mmcblk0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the SOTA_TOML environment variable is set, then mkefidisk will copy that file into /etc/sota.toml, provisioning the machine at image creation time. Since sudo squashes environment variables by default, the value of SOTA_TOML needs to be passed in explicitly:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>sudo SOTA_TOML=/tmp/mysota.toml ../meta-oim/scripts/mkefidisk.sh /dev/sdX tmp/deploy/images/genericx86-64/openivi-image-genericx86-64.iso /dev/mmcblk0</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="provisioning-options">Provisioning options</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are 3 ways to provision sota_client:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ethernet MAC address based - traditional</p>
+</li>
+<li>
+<p>sota.toml stored in efivars - First get the sota.toml onto the device, then run  <code>ota-plus-demo-provision sota.toml</code> to save it in EFI. ota-plus-demo-provision will read from there even after the SD card has been reflashed.</p>
+</li>
+<li>
+<p>mkefidisk.sh - As above, passed via the <code>SOTA_TOML</code> environment variable.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="unetbootin-backup">UNetbootin (Backup)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As a backup, UNetbootin can be used to write the image.</p>
 </div>
 <div class="paragraph">
 <p>Here are the installation steps:</p>
@@ -143,6 +190,8 @@ using the UNetbootin tool, which runs on Windows, Mac and Linux</p>
 <p>The device should boot into the OpenIVI graphical interface.  If this is an ATS image, it will appear in the sales demo account of <a href="https://app.atsgarage.com">ATS Garage</a></p>
 </li>
 </ol>
+</div>
+</div>
 </div>
 
                         </div>
