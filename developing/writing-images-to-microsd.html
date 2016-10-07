@@ -125,7 +125,7 @@
 <h2 id="provisioning-options">Provisioning options</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are 3 ways to provision sota_client:</p>
+<p>There are 4 ways to provision sota_client:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -138,7 +138,13 @@
 <li>
 <p>mkefidisk.sh - As above, passed via the <code>SOTA_TOML</code> environment variable.</p>
 </li>
+<li>
+<p>Plug in a USB pen drive with the label 'PROVISION' containing a <code>sota.toml</code> file in the root directory. The <code>usb-key-provision</code> package will automatically copy this to <code>/etc</code> and restart SOTA Client.</p>
+</li>
 </ol>
+</div>
+<div class="paragraph">
+<p>If <code>/etc/sota.toml</code> exists, then provisioning based on Ethernet MAC address or EFI variables will not be run. This means that changes made manually or by inserting a USB pen drive will stick.</p>
 </div>
 </div>
 </div>
