@@ -26,7 +26,7 @@ There are 4 ways to provision sota_client:
 1. Ethernet MAC address based - traditional
 2. sota.toml stored in efivars - First get the sota.toml onto the device, then run  `ota-plus-demo-provision sota.toml` to save it in EFI. ota-plus-demo-provision will read from there even after the SD card has been reflashed.
 3. mkefidisk.sh - As above, passed via the `SOTA_TOML` environment variable.
-4. Plug in a USB pen drive with the label 'PROVISION' containing a `sota.toml` file in the root directory. The `usb-key-provision` package will automatically copy this to `/etc` and restart SOTA Client.
+4. Plug in a fat32 formatted USB pen drive with the label 'PROVISION' containing a `sota.toml` file in the root directory. The `usb-key-provision` package will automatically copy this to `/etc` and restart SOTA Client.
 
 If `/etc/sota.toml` exists, then provisioning based on Ethernet MAC address or EFI variables will not be run. This means that changes made manually or by inserting a USB pen drive will stick.
 
