@@ -19,6 +19,8 @@ If the SOTA_TOML environment variable is set, then mkefidisk will copy that file
 
   sudo SOTA_TOML=/tmp/mysota.toml ../meta-oim/scripts/mkefidisk.sh /dev/sdX tmp/deploy/images/genericx86-64/openivi-image-genericx86-64.iso /dev/mmcblk0
 
+The last parameter is the device name that the USB stick or SD card will appear as *on the target device*. For the old OpenIVI boxes, this will be `/dev/sda` not `/dev/mmcblk0`. *Don't make the first parameter `/dev/sda`*. That is the name of the USB stick or SD card on the host machine, and doing so will nuke your hard drive.
+
 ## Provisioning options
 
 There are 4 ways to provision sota_client:
